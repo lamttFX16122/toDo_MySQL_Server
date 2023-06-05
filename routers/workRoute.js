@@ -1,0 +1,15 @@
+const express = require('express');
+const WorkController = require('../controllers/workController');
+const { verifyToken } = require('../middlewares/authMiddleware');
+const route = express.Router();
+route.post('/addwork', verifyToken, WorkController.addWork);
+route.get('/', verifyToken, WorkController.getWorkDistribution);
+route.post('/editWork', verifyToken, WorkController.editWork);
+route.post('/changeStatus', verifyToken, WorkController.changeStatus);
+route.delete('/deleteWork', verifyToken, WorkController.deleteWork);
+route.post('/changePrioritize', verifyToken, WorkController.changePrioritize);
+route.get('/workSearch', WorkController.workSearch);
+route.get('/statistical', WorkController.statistical);
+route.get('/generate-pdf-pagination', WorkController.printPDF_Pagination);
+route.get('/generate-pdf-works', WorkController.printPDF_All);
+module.exports = route;

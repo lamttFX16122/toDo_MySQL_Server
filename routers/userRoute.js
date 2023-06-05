@@ -1,0 +1,10 @@
+const express = require('express');
+const userController = require('../controllers/userController');
+const { checkEmailExist } = require('../middlewares/userMiddleware');
+const { verifyToken } = require('../middlewares/authMiddleware');
+const route = express.Router();
+route.post('/register', checkEmailExist, userController.userRegister);
+route.post('/checkEmail', userController.checkEmailExist);
+route.post('/change-info', verifyToken, userController.userUpdateInfo);
+route.post('/change-password', verifyToken, userController.userUpdatePassword);
+module.exports = route;
