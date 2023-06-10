@@ -10,7 +10,7 @@ const workRoute = require('./routers/workRoute');
 const app = express();
 
 // use cors
-app.use(cors({ credentials: true, origin: 'http://localhost:9193' }));
+app.use(cors({ credentials: true, origin: process.env.CLIENT_APP }));
 // use body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

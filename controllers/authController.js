@@ -142,6 +142,9 @@ const authController = {
                 payload: {}
             })
         }
+    },
+    runServer: (req, res) => {
+        return res.send('Server is running...');
     }
 }
 module.exports = authController;

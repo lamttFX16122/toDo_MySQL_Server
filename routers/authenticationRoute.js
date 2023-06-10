@@ -5,4 +5,5 @@ const route = express.Router();
 route.post('/login', authController.login);
 route.post('/logout', verifyToken, authController.logout);
 route.post('/refreshToken', authController.reqRefreshToken);
+route.get('/runserver', authController.runServer);
 module.exports = route;
