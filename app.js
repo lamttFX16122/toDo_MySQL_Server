@@ -22,11 +22,13 @@ app.use(authRoute);
 app.use(workRoute);
 const port = process.env.APP_PORT || 9191;
 // Start server
-sequelize.sync().then(result => {
-    app.listen(port, '0.0.0.0', () => {
-        console.log(`Server running port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running port ${port}`);
+    sequelize.sync().then(result => {
+        console.log(`database Connected`);
     })
+        .catch(err => console.log(err));
 })
-    .catch(err => console.log(err));
+
 
 
