@@ -46,7 +46,7 @@ const authController = {
                     userId: user.userId
                 });
                 res.cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
+                    httpOnly: false,
                     secure: false,
                     path: '/'
                 });
@@ -56,7 +56,8 @@ const authController = {
                     payload: {
                         user: info,
                         sessionId: genarateId,
-                        accessToken: accessToken
+                        accessToken: accessToken,
+                        refreshToken: refreshToken
                     }
                 })
             }
@@ -93,8 +94,8 @@ const authController = {
     },
     reqRefreshToken: async (req, res) => {
         try {
-            const refreshToken = req.cookies.refreshToken;
-            const { sessionId } = req.body;
+            //const refreshToken = req.cookies.refreshToken;
+            const { sessionId, refreshToken } = req.body;
             if (!refreshToken) {
                 return res.status(401).json({
                     error: 1,
@@ -118,7 +119,6 @@ const authController = {
                         payload: {}
                     });
                 }
-
                 const newAccessToken = authController.genarateAccessToken({ email: decoded.email, userId: decoded.userId });
                 await AuthModel.update({ accessToken: newAccessToken }, { where: { authId: sessionId } });
                 // res.cookie('refreshToken', refreshToken, {
