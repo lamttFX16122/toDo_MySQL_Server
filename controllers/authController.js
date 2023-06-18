@@ -46,7 +46,7 @@ const authController = {
                     userId: user.userId
                 });
                 res.cookie('refreshToken', refreshToken, {
-                    httpOnly: false,
+                    httpOnly: true,
                     secure: false,
                     path: '/'
                 });
