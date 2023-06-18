@@ -376,7 +376,7 @@ const workController = {
     //         });
     //     }
     // },
-    // USE PORTGRES
+    // use postgres
     statistical: async (req, res) => {
         try {
             const userId = req.headers.userid;
@@ -384,7 +384,7 @@ const workController = {
             const pageSize = 3;
             const page = (parseInt(req.query.page) - 1) * pageSize;
             /**
-             * ---- Function name portgres ----
+             * ---- Function name postgres ----
              * sel_workstatistical_rownum
              * sel_workstatistical_processexist
              * sel_workstatistical_lastpage

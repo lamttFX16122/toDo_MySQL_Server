@@ -121,11 +121,11 @@ const authController = {
 
                 const newAccessToken = authController.genarateAccessToken({ email: decoded.email, userId: decoded.userId });
                 await AuthModel.update({ accessToken: newAccessToken }, { where: { authId: sessionId } });
-                res.cookie('refreshToken', refreshToken, {
-                    httpOnly: false,
-                    secure: false,
-                    path: '/'
-                });
+                // res.cookie('refreshToken', refreshToken, {
+                //     httpOnly: false,
+                //     secure: false,
+                //     path: '/'
+                // });
                 return res.status(200).json({
                     error: 0,
                     message: 'refresh token successfully',
