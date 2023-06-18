@@ -349,43 +349,149 @@ const workController = {
             });
         }
     },
+    //USE WORKBENCH
+    // statistical: async (req, res) => {
+    //     try {
+    //         const userId = '1edd77b2-fe88-6430-16ba-15ae8bbdc41d'// req.headers.userid;
+    //         const workStatus = parseInt(req.query.workStatus);
+    //         const pageSize = 3;
+    //         const page = (parseInt(req.query.page) - 1) * pageSize
+    //         const result = await sequelize.query('call sp_Satiscal_WorkEnd(:userId, :workStatus, :page, :pageSize)',
+    //             {
+    //                 replacements: { userId, workStatus, page, pageSize },
+    //                 type: sequelize.QueryTypes.SELECT
+    //             })
+    //         console.log(result)
+    //         return res.status(200).json({
+    //             error: 0,
+    //             message: 'statistical work successfully',
+    //             payload: result
+    //         })
+    //     } catch (error) {
+    //         console.log(error);
+    //         return res.status(500).json({
+    //             error: 1,
+    //             message: 'Server Error',
+    //             payload: {}
+    //         });
+    //     }
+    // },
+    // USE PORTGRES
     statistical: async (req, res) => {
         try {
             const userId = req.headers.userid;
             const workStatus = parseInt(req.query.workStatus);
             const pageSize = 3;
-            const page = (parseInt(req.query.page) - 1) * pageSize
-            const result = await sequelize.query('call sp_Satiscal_WorkEnd(:userId, :workStatus, :page, :pageSize)',
+            const page = (parseInt(req.query.page) - 1) * pageSize;
+            /**
+             * ---- Function name portgres ----
+             * sel_workstatistical_rownum
+             * sel_workstatistical_processexist
+             * sel_workstatistical_lastpage
+             */
+            const result_works = await sequelize.query(`select * from sel_workstatistical_rownum(:userId,:workStatus, :page, :pageSize)`,
                 {
                     replacements: { userId, workStatus, page, pageSize },
                     type: sequelize.QueryTypes.SELECT
-                })
+                });
+            const result_processExist = await sequelize.query(`select * from sel_workstatistical_processexist(:userId,:workStatus, :page, :pageSize)`,
+                {
+                    replacements: { userId, workStatus, page, pageSize },
+                    type: sequelize.QueryTypes.SELECT
+                });
+            const result_lastPage = await sequelize.query(`select * from sel_workstatistical_lastpage(:userId,:workStatus, :page, :pageSize)`,
+                {
+                    replacements: { userId, workStatus, page, pageSize },
+                    type: sequelize.QueryTypes.SELECT
+                });
+            // Format data by object assign 
+            const obj_result_works = Object.assign({}, result_works);
+            const obj_result_processExist = Object.assign({}, result_processExist);
+            const obj_result_lastPage = Object.assign({}, result_lastPage);
+
             return res.status(200).json({
                 error: 0,
                 message: 'statistical work successfully',
-                payload: result
+                payload: [obj_result_works, obj_result_processExist, obj_result_lastPage]//result
             })
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 error: 1,
                 message: 'Server Error',
-                payload: {}
+                payload: []
             });
         }
     },
+    /**
+     * use for mysql workbench
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
+    // printPDF_Pagination: async (req, res) => {
+    //     try {
+    //         const userId = req.headers.userid;
+    //         const workStatus = parseInt(req.query.workStatus);
+    //         const pageSize = 3;
+    //         const page = (parseInt(req.query.page) - 1) * pageSize;
+    //         const result = await sequelize.query('call sp_Satiscal_WorkEnd(:userId, :workStatus, :page, :pageSize)',
+    //             {
+    //                 replacements: { userId, workStatus, page, pageSize },
+    //                 type: sequelize.QueryTypes.SELECT
+    //             })
+    //         // =========================
+    //         let titleHeader = '';
+    //         if (workStatus === 1) {
+    //             titleHeader = 'CÔNG VIỆC ĐANG LÀM';
+    //         }
+    //         else if (workStatus === 0) {
+    //             titleHeader = 'CÔNG VIỆC ĐANG CHỜ';
+    //         }
+    //         else if (workStatus === 2) {
+    //             titleHeader = 'CÔNG VIỆC ĐÃ LÀM';
+    //         }
+    //         else {
+    //             titleHeader = 'DANH SÁCH CÔNG VIỆC';
+    //         }
+    //         // create Doc
+    //         const fileName = `${userId}-${moment().format('YYYYMMDDhhmmss')}.pdf`;
+    //         const filePath = path.join(__dirname + "/../documentPDF", fileName);
+    //         const docPdf = new PDFDocument({ size: "A4", margin: 50 });
+    //         generate_Header(docPdf, titleHeader);
+    //         generate_Work(docPdf, result[0]);
+    //         docPdf.end();
+    //         // docPdf.pipe(fs.createWriteStream(filePath));
+    //         res.type('application/pdf');
+    //         //Dowload pdf
+    //         docPdf.pipe(res);
+
+    //     } catch (error) {
+    //         console.log(error);
+    //         return res.status(500).json({
+    //             error: 1,
+    //             message: 'Server Error',
+    //             payload: {}
+    //         });
+    //     }
+    // },
+    /**
+     * print pdf work at current page
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     printPDF_Pagination: async (req, res) => {
         try {
             const userId = req.headers.userid;
             const workStatus = parseInt(req.query.workStatus);
             const pageSize = 3;
-            const page = (parseInt(req.query.page) - 1) * pageSize
-            const result = await sequelize.query('call sp_Satiscal_WorkEnd(:userId, :workStatus, :page, :pageSize)',
+            const page = (parseInt(req.query.page) - 1) * pageSize;
+            const result_works = await sequelize.query(`select * from sel_workstatistical_rownum(:userId,:workStatus, :page, :pageSize)`,
                 {
                     replacements: { userId, workStatus, page, pageSize },
                     type: sequelize.QueryTypes.SELECT
-                })
-            // =========================
+                });
             let titleHeader = '';
             if (workStatus === 1) {
                 titleHeader = 'CÔNG VIỆC ĐANG LÀM';
@@ -404,7 +510,7 @@ const workController = {
             const filePath = path.join(__dirname + "/../documentPDF", fileName);
             const docPdf = new PDFDocument({ size: "A4", margin: 50 });
             generate_Header(docPdf, titleHeader);
-            generate_Work(docPdf, result[0]);
+            generate_Work(docPdf, result_works);
             docPdf.end();
             // docPdf.pipe(fs.createWriteStream(filePath));
             res.type('application/pdf');
@@ -420,11 +526,20 @@ const workController = {
             });
         }
     },
+    /**
+     * print PDF all works or all work of status
+     * @param {*} req 
+     * @param {*} res 
+     * @returns pdf viewer
+     */
     printPDF_All: async (req, res) => {
         try {
+            /**
+             * function sp_PrintAllWorkPDF
+             */
             const userId = req.headers.userid;
             const workStatus = parseInt(req.query.workStatus);
-            const result = await sequelize.query('call sp_PrintAllWork(:userId, :workStatus)',
+            const result = await sequelize.query(`select * from sp_PrintAllWorkPDF(:userId,:workStatus)`,
                 {
                     replacements: { userId, workStatus },
                     type: sequelize.QueryTypes.SELECT
@@ -448,7 +563,7 @@ const workController = {
             const filePath = path.join(__dirname + "/../documentPDF", fileName);
             const docPdf = new PDFDocument({ size: "A4", margin: 50 });
             generate_Header(docPdf, titleHeader);
-            generate_Work(docPdf, result[0]);
+            generate_Work(docPdf, result);
             docPdf.end();
             // docPdf.pipe(fs.createWriteStream(filePath));
             res.type('application/pdf');
@@ -490,7 +605,6 @@ const generate_Work = (doc, work) => {
     generate_Hr(doc, 100, 550);
     const marginTop = 105;
     // Generate table header
-
     rowHeaders.forEach((header, i) => {
         doc.font(path.join(__dirname + '/../public/fonts/timesbd.ttf'))
             .fontSize(12)

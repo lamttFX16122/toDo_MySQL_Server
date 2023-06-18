@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "start-server": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,8 @@
     "mysql2": "^3.2.0",
     "nodemon": "^2.0.22",
     "pdfkit": "^0.13.0",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.30.0",
     "uuid-with-v6": "^2.0.0"
   }
