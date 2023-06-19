@@ -1,0 +1,29 @@
+QUẢN LÝ CÔNG VIỆC – TODO
+Mô tả
+Project Quản lý công việc (TODO) được phát triển dựa trên ý tưởng lập kế hoạch làm việc mỗi ngày và kiểm soát thời gian hoàn thành công việc theo kế hoạch.
+URL test: https://to-do-my-sql-app.vercel.app/ 
+Link mã nguồn: 
+Chức năng chính
++ CRUD người dùng.
++ CRUD công việc.
++ Thống kê các công việc (đang chờ bắt đầu, đang làm và đã làm).
++ Xuất thông tin công việc ra tệp PDF.
+Công nghệ sử dụng
+- Front-end:
++ ReactJS, Bootstrap 5
++ Giao diện được xây dựng đơn giản bằng ReactJS và Bootstrap 5, cung cấp giao diện phù hợp với nhiều thiết bị (responsive).
++ Sử dụng React-redux để lưu trữ trạng thái phù hợp tăng tính tương tác người dụng.
++ Mã nguồn được lưu tại Github: https://github.com/lamttFX16122/toDo_MySQL_App 
++ Front-end được deploy tại https://vercel.com/
++ URL: https://to-do-my-sql-app.vercel.app/
+- Back-end: 
++ Xây dựng dựa trên Node JS.
++ Áp dụng theo tiêu chuẩn Restful API dựng server để cung cấp các API cho Front-end (ReactJS) sử dụng.
++ Sử dụng Sequelize ORM hỗ trợ thao tác và kết nối với database.
++ Authentication sử dụng token (Json web token - JWT) để xác thực.
++ Mã nguồn được lưu tại Github: https://github.com/lamttFX16122/toDo_MySQL_Server 
++ Server Nodejs được deploy tại https://render.com/ .
++ URL: https://todomysql.onrender.com/
+-	Database
++ Database thiết kế dựa trên PostgresSQL. Bao gồm các bảng lưu dữ liệu và các Function query.
++ Database trên môi trường thực tế được cung cấp bởi https://supabase.com/ 
